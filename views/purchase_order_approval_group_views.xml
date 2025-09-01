@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <record id="purchase_order_approval_group_form_view" model="ir.ui.view">
+      <field name="name">purchase.order.approval.group.form</field>
+      <field name="model">purchase.order.approval.group</field>
+      <field name="arch" type="xml">
+        <form string="Purchase Approval Group">
+          <sheet>
+            <group>
+              <field name="name"/>
+              <field name="no_limit"/>
+              <field name="level"/>
+              <field name="max_amount"
+                     invisible="no_limit"
+                     help="If this group has no limit, then this field is not used."/>
+              <field name="division_id"/>
+            </group>
+            <group string="Group Members">
+              <field name="user_ids" widget="many2many_tags"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="purchase_order_approval_group_tree_view" model="ir.ui.view">
+      <field name="name">purchase.order.approval.group.list</field>
+      <field name="model">purchase.order.approval.group</field>
+      <field name="arch" type="xml">
+        <list default_order="no_limit, max_amount">
+          <field name="name"/>
+          <field name="max_amount" invisible="no_limit"/>
+          <field name="no_limit"/>
+          <field name="level"/>
+          <field name="division_id"/>
+        </list>
+      </field>
+    </record>
+
+
+    <record id="purchase_order_approval_group_search_view" model="ir.ui.view">
+      <field name="name">Purchase order approval group search view</field>
+      <field name="model">purchase.order.approval.group</field>
+      <field name="arch" type="xml">
+        <search string="Search approval group">
+          <field name="name" string="Name"
+            filter_domain="[('name', 'ilike', self)]"/>
+          <field name="max_amount" string="Max amount"
+            filter_domain="[('max_amount', 'ilike', self)]"/>
+        </search>
+      </field>
+    </record>
+
+    <record id="open_approval_groups" model="ir.actions.act_window">
+      <field name="name">Approval group action</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">purchase.order.approval.group</field>
+      <field name="view_mode">kanban,list,form</field>
+      <field name="view_id" eval="purchase_order_approval_group_tree_view"/> <!-- Force empty -->
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          No group found. Let's add one!
+        </p><p>
+          You can create some users groups with a max amount. This amount cannot be overwhelmed by users when they want to approve purchase orders
+        </p>
+      </field>
+    </record>
+
+    <menuitem action="open_approval_groups"
+      id="menu_purchase_approval_groups"
+      name="Purchase approval groups"
+      parent="purchase.menu_purchase_root"
+      sequence="99"
+      groups="base.group_system"/>
+
+  </data>
+</odoo>

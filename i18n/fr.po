@@ -1,0 +1,238 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* purchase_order_approval_group
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0+e-20210330\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-05-18 14:52+0000\n"
+"PO-Revision-Date: 2021-05-18 14:52+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: purchase_order_approval_group
+#: model:mail.template,body_html:purchase_order_approval_group.notify_higher_group_for_purchase_approval
+msgid ""
+"\n"
+"            <p>Hi !</p>\n"
+"            <p>I'm asking to your approbation for the #${object.name or object.id} PO</p>\n"
+"          \n"
+"          "
+msgstr ""
+"\n"
+"            <p>Bonjour !</p>\n"
+"            <p>Je vous demande d'approuver le PO #${object.name or object.id}</p>\n"
+"          \n"
+"          "
+
+
+#. module: purchase_order_approval_group
+#: model:mail.template,subject:purchase_order_approval_group.notify_higher_group_for_purchase_approval
+msgid "#${object.name or object.id} approbation"
+msgstr ""
+
+#. module: purchase_order_approval_group
+#: model:ir.actions.act_window,name:purchase_order_approval_group.open_approval_groups
+msgid "Approval group action"
+msgstr "Groupe d'approbation"
+
+#. module: purchase_order_approval_group
+#: model:ir.model,name:purchase_order_approval_group.model_purchase_order_approval_group
+msgid "Approval groups for purchase orders"
+msgstr "Groupe d'approbation pour les commandes d'achats"
+
+#. module: purchase_order_approval_group
+#: model:ir.model.fields,field_description:purchase_order_approval_group.field_purchase_order_approval_group__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: purchase_order_approval_group
+#: model:ir.model.fields,field_description:purchase_order_approval_group.field_purchase_order_approval_group__create_date
+msgid "Created on"
+msgstr "Crée le"
+
+#. module: purchase_order_approval_group
+#: model:ir.model.fields,field_description:purchase_order_approval_group.field_purchase_order__display_name
+#: model:ir.model.fields,field_description:purchase_order_approval_group.field_purchase_order_approval_group__display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: purchase_order_approval_group
+#: code:addons/purchase_order_approval_group/models/purchase_order.py:0
+#: model:ir.model.fields,field_description:purchase_order_approval_group.field_purchase_order__higher_validation_id
+#, python-format
+msgid "Higher validation"
+msgstr "Plus grande validation actuelle"
+
+#. module: purchase_order_approval_group
+#: model:ir.model.fields,field_description:purchase_order_approval_group.field_purchase_order__id
+#: model:ir.model.fields,field_description:purchase_order_approval_group.field_purchase_order_approval_group__id
+msgid "ID"
+msgstr "Id"
+
+#. module: purchase_order_approval_group
+#: model_terms:ir.ui.view,arch_db:purchase_order_approval_group.purchase_order_approval_group_form_view
+msgid "If this group has no limit, then this field is useless"
+msgstr "Si ce groupe n'a pas de limite, alors ce champ est inutile"
+
+#. module: purchase_order_approval_group
+#: model:ir.model.fields,field_description:purchase_order_approval_group.field_purchase_order____last_update
+#: model:ir.model.fields,field_description:purchase_order_approval_group.field_purchase_order_approval_group____last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: purchase_order_approval_group
+#: model:ir.model.fields,field_description:purchase_order_approval_group.field_purchase_order_approval_group__write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: purchase_order_approval_group
+#: model:ir.model.fields,field_description:purchase_order_approval_group.field_purchase_order_approval_group__write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: purchase_order_approval_group
+#: code:addons/purchase_order_approval_group/models/purchase_order_approval_group.py:0
+#: model_terms:ir.ui.view,arch_db:purchase_order_approval_group.purchase_order_approval_group_search_view
+#, python-format
+msgid "Max amount"
+msgstr "Montant maximum"
+
+#. module: purchase_order_approval_group
+#: model:ir.model.fields,field_description:purchase_order_approval_group.field_purchase_order_approval_group__max_amount
+msgid "Montant maximum"
+msgstr ""
+
+#. module: purchase_order_approval_group
+#: code:addons/purchase_order_approval_group/models/purchase_order_approval_group.py:0
+#: model_terms:ir.ui.view,arch_db:purchase_order_approval_group.purchase_order_approval_group_search_view
+#, python-format
+msgid "Name"
+msgstr "Nom"
+
+#. module: purchase_order_approval_group
+#: model_terms:ir.actions.act_window,help:purchase_order_approval_group.open_approval_groups
+msgid "No group found. Let's add one!"
+msgstr "Pas de groupe trouvé. Ajoutez en un !"
+
+#. module: purchase_order_approval_group
+#: code:addons/purchase_order_approval_group/models/purchase_order_approval_group.py:0
+#, python-format
+msgid "No limit"
+msgstr "Pas de limite"
+
+#. module: purchase_order_approval_group
+#: model:ir.model.fields,field_description:purchase_order_approval_group.field_purchase_order_approval_group__name
+msgid "Nom"
+msgstr ""
+
+#. module: purchase_order_approval_group
+#: model:ir.model.fields,field_description:purchase_order_approval_group.field_purchase_order_approval_group__no_limit
+msgid "Pas de limite"
+msgstr ""
+
+#. module: purchase_order_approval_group
+#: model:ir.model,name:purchase_order_approval_group.model_purchase_order
+msgid "Purchase Order"
+msgstr "Commande fournisseur"
+
+#. module: purchase_order_approval_group
+#: model_terms:ir.ui.view,arch_db:purchase_order_approval_group.purchase_order_approval_group_form_view
+msgid "Purchase approval group"
+msgstr "Groupe d'approbation d'achats"
+
+#. module: purchase_order_approval_group
+#: model:ir.ui.menu,name:purchase_order_approval_group.menu_purchase_approval_groups
+msgid "Purchase approval groups"
+msgstr "Groupes d'approbation d'achats"
+
+#. module: purchase_order_approval_group
+#: model_terms:ir.ui.view,arch_db:purchase_order_approval_group.purchase_order_approval_group_search_view
+msgid "Search approval group"
+msgstr "Recherche de groupe d'approbation"
+
+#. module: purchase_order_approval_group
+#: model_terms:ir.ui.view,arch_db:purchase_order_approval_group.res_config_settings_purchase_rule_view_form
+msgid ""
+"The option of purchase order validation by managers is currently unavailable"
+" because of the installation of the module named "
+"\"purchase_order_approval_group\""
+msgstr ""
+"L'option de validation d'achats par les managers est actuellement "
+"indisponible car le module \"Purchase order approval group\" est installé"
+
+#. module: purchase_order_approval_group
+#: code:addons/purchase_order_approval_group/models/purchase_order.py:0
+#, python-format
+msgid ""
+"There is no more group than can validate this PO, please ask a manager to "
+"configure rights."
+msgstr ""
+"Il n'y a pas de groupe avec plus de droit qui pourra valider cette commande, "
+"veuillez demander à un manager de configurer des droits."
+
+#. module: purchase_order_approval_group
+#: code:addons/purchase_order_approval_group/models/purchase_order_approval_group.py:0
+#, python-format
+msgid "Users"
+msgstr "Utilisateurs"
+
+#. module: purchase_order_approval_group
+#: model:ir.model.fields,field_description:purchase_order_approval_group.field_purchase_order_approval_group__user_ids
+msgid "Utilisateurs"
+msgstr ""
+
+#. module: purchase_order_approval_group
+#: model_terms:ir.actions.act_window,help:purchase_order_approval_group.open_approval_groups
+msgid ""
+"You can create some users groups with a max amount. This amount cannot be "
+"overwhelmed by users when they want to approve purchase orders"
+msgstr ""
+"Vous pouvez créer des groupes d'utilisateurs avec un montant maximum. Ce "
+"montant ne pourra pas être dépassé par les utilisateurs du groupe pour "
+"valider les commandes d'achats"
+
+#. module: purchase_order_approval_group
+#: code:addons/purchase_order_approval_group/models/purchase_order.py:0
+#, python-format
+msgid ""
+"You can't approve this by yourself, please wait for the manager to approve "
+"this."
+msgstr ""
+"Vous ne pouvez pas approuver cette commande vous-même. Veuillez attendre "
+"qu'un responsable l'approuve."
+
+#. module: cap_purchase_order_approval_group
+#: model:ir.model.fields,field_description:cap_purchase_order_approval_group.field_purchase_order_approval_group__level
+msgid "Valideur"
+msgstr ""
+
+#. module: cap_purchase_order_approval_group
+#: model:ir.model.fields.selection,name:cap_purchase_order_approval_group.selection__purchase_order_approval_group__level__1
+msgid "Valideur 1"
+msgstr ""
+
+#. module: cap_purchase_order_approval_group
+#: model:ir.model.fields.selection,name:cap_purchase_order_approval_group.selection__purchase_order_approval_group__level__2
+msgid "Valideur 2"
+msgstr ""
+
+#. module: cap_purchase_order_approval_group
+#: model:ir.model.fields.selection,name:cap_purchase_order_approval_group.selection__purchase_order_approval_group__level__3
+msgid "Valideur 3"
+msgstr ""
+
+#. module: cap_purchase_order_approval_group
+#: model:ir.model.fields.selection,name:cap_purchase_order_approval_group.selection__purchase_order_approval_group__level__4
+msgid "Valideur 4"
+msgstr ""
+
+#. module: cap_purchase_order_approval_group
+#: model:ir.model.fields,field_description:cap_purchase_order_approval_group.field_purchase_order_approval_group__division_id
+msgid "Division & Service"
+msgstr "Division & Service"

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data noupdate="1">
+    <record id="zero_group" model="purchase.order.approval.group">
+      <field name="name">Group zero rights</field>
+      <field name="max_amount">0</field>
+      <field name="no_limit">False</field>
+    </record>
+
+    <record id="thousand_group" model="purchase.order.approval.group">
+      <field name="name">Group thousand rights</field>
+      <field name="max_amount">1000</field>
+      <field name="no_limit">False</field>
+    </record>
+
+    <record id="no_limit_group" model="purchase.order.approval.group">
+      <field name="name">Group all rights</field>
+      <field name="max_amount">-1</field>
+      <field name="no_limit">True</field>
+    </record>
+  </data>
+</odoo>
