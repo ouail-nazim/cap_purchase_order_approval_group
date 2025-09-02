@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models, _
+from odoo import SUPERUSER_ID,fields, models, _
 from odoo.exceptions import AccessError, UserError
 import logging
+
 log = logging.getLogger(__name__).info
+
 
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
-    higher_validation_id = fields.Many2one('purchase.order.approval.group', string=_("Higher validation"), readonly=True, default=False)
-    # next_group = fields.Many2one('purchase.order.approval.group',  string=_("Next Group"), readonly=True, compute="get_next_group")
-    next_group = fields.Many2one('purchase.order.approval.group',  string=_("Next Group"), readonly=True)
+    higher_validation_id = fields.Many2one('purchase.order.approval.group', string=_("Higher validation"),
+                                           readonly=True, default=False)
+    next_group = fields.Many2one('purchase.order.approval.group', string=_("Next Group"), readonly=True)
     division_id = fields.Many2one('hr.department', 'Division &amp; Service', check_company=True)
 
     def create(self, vals):
@@ -18,8 +20,10 @@ class PurchaseOrder(models.Model):
 
         # Appel de la méthode get_first_group juste après la création
         if purchase.division_id:
-
-            purchase.next_group = self.env['purchase.order.approval.group'].search([('division_id','=',purchase.division_id.id)]).get_first_group()
+            purchase.next_group = self.env['purchase.order.approval.group'].search(
+                [('division_id', '=', purchase.division_id.id)]).get_first_group()
+            if purchase.next_group:
+                purchase.next_group.create_approvels(purchase)
         return purchase
 
     def button_confirm(self):
@@ -28,7 +32,7 @@ class PurchaseOrder(models.Model):
         else:
             self.ensure_one()
             self.write({'state': 'to approve'})
-            approval_groups = self.env['purchase.order.approval.group'].search([('max_amount','!=',False)])
+            approval_groups = self.env['purchase.order.approval.group'].search([('max_amount', '!=', False)])
             template_id = self.env.ref('cap_purchase_order_approval_group.notify_higher_group_for_purchase_approval')
             template_id.email_to = self.must_send_mail(self.amount_total).mapped('login')
             self.higher_validation_id = approval_groups.get_max_group(self)
@@ -37,7 +41,7 @@ class PurchaseOrder(models.Model):
                 'default_model': 'purchase.order',
                 'default_res_ids': [self.id],
                 'default_use_template': bool(template_id),
-                'default_template_id': template_id.id  if template_id else None,
+                'default_template_id': template_id.id if template_id else None,
                 'default_composition_mode': 'comment',  # ou 'mass_mail' / 'comment'
                 'force_email': True,  # pour forcer l’envoi réel au lieu d’un message
             }
@@ -51,41 +55,68 @@ class PurchaseOrder(models.Model):
             }
 
     def button_approve(self, force=False):
-        if self.can_user_approve():
-            self.next_group = self.get_next_group(self.next_group)
+        if not self.can_user_approve():
+            raise UserError(_("You don't have rights to approve this purchase order"))
 
-            if self.can_user_validate() or not self.next_group:
-                return super().button_approve()
+        Approvals = self.env['purchase.order.approvals']
+        user_id = self.env.user.id
 
-            # approval_groups = self.env['purchase.order.approval.group'].search([('max_amount','!=',False)])
-            # log('approve 2 %r', approval_groups)
-            # if self.higher_validation_id:
-            #     if not approval_groups.get_max_group(self) or self.higher_validation_id.max_amount >= approval_groups.get_max_group(self).max_amount:
-            #         raise AccessError(_("You can't approve this by yourself, please wait for the manager to approve this."))
-            #     else:
-            #         self.higher_validation_id = approval_groups.get_max_group(self)
-            # else:
-            #     self.higher_validation_id = approval_groups.get_max_group(self)
+        # Fetch approvals for current user and group in one go
+        user_approvals = Approvals.search([
+            ('user_id', '=', user_id),
+            ('purchase_order_id', '=', self.id),
+            ('group_id', '=', self.next_group.id),
+        ])
 
-            template_id = self.env.ref('cap_purchase_order_approval_group.notify_higher_group_for_purchase_approval').with_user(1)
-            template_id.email_to = self.must_send_mail(self.amount_total).mapped('login')
+        if user_approvals.filtered(lambda a: a.status == 'approved'):
+            raise UserError(_("You have already approved this Order"))
 
-            ctx = {
+        # Approve user approvals
+        user_approvals.write({'status': 'approved'})
+
+        self.message_post(
+            body=_('The purchase order has been approved by %s') % self.env.user.name,
+            author_id=user_id.partner_id,
+            message_type="comment",
+            subtype_xmlid="mail.mt_comment",
+        )
+
+        # If there are still approvals pending for this group, stop here
+        if Approvals.search_count([
+            ('status', '=', 'to_approve'),
+            ('purchase_order_id', '=', self.id),
+            ('group_id', '=', self.next_group.id),
+        ]):
+            return True
+
+        # Move to next group or validate
+        self.next_group = self.get_next_group(self.next_group)
+        if self.can_user_validate() or not self.next_group:
+            return super().button_approve()
+
+        # Create approvals for the next group
+        self.next_group.create_approvels(self)
+
+        # Prepare notification
+        template = self.env.ref(
+            'cap_purchase_order_approval_group.notify_higher_group_for_purchase_approval'
+        ).with_user(SUPERUSER_ID)  # use constant instead of `1`
+        template.email_to = ",".join(self.must_send_mail(self.amount_total).mapped('login'))
+
+        return {
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'mail.compose.message',
+            'target': 'new',
+            'context': {
                 'default_model': 'purchase.order',
                 'default_res_ids': [self.id],
-                'default_use_template': bool(template_id),
-                'default_template_id': template_id.id  if template_id else None,
-                'default_composition_mode': 'comment',  # ou 'mass_mail' / 'comment'
-                'force_email': True,  # pour forcer l’envoi réel au lieu d’un message
-            }
-
-            return {
-                'type': 'ir.actions.act_window',
-                'view_mode': 'form',
-                'res_model': 'mail.compose.message',
-                'target': 'new',
-                'context': ctx,
-            }
+                'default_use_template': bool(template),
+                'default_template_id': template.id if template else None,
+                'default_composition_mode': 'comment',
+                'force_email': True,
+            },
+        }
 
     def can_user_approve(self):
         # user_max_group = self.env['purchase.order.approval.group'].search([('max_amount','!=',False)]).get_max_group(self)
@@ -98,9 +129,9 @@ class PurchaseOrder(models.Model):
     def can_user_validate(self):
         # user_max_group = self.env['purchase.order.approval.group'].search([('max_amount','!=',False)]).get_max_group(self)
         user_max_group = self.next_group
-        if(user_max_group):
+        if (user_max_group):
             # validation si le niveau suivant n'est pas requis : on valide depuis niveau 2 si montant non dépassé en niveau 3
-            if ((user_max_group.max_amount >= self.amount_total and user_max_group.level in ('3','4'))):
+            if ((user_max_group.max_amount >= self.amount_total and user_max_group.level in ('3', '4'))):
                 return True
             else:
                 return False
@@ -113,6 +144,7 @@ class PurchaseOrder(models.Model):
     def get_next_group(self, group):
         next_group = False
         for purchase in self:
-            next_group = self.env['purchase.order.approval.group'].search([('division_id','=',purchase.division_id.id)]).get_next_group(group)
+            next_group = self.env['purchase.order.approval.group'].search(
+                [('division_id', '=', purchase.division_id.id)]).get_next_group(group)
 
         return next_group

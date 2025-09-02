@@ -11,6 +11,7 @@
         </button>
         <field name="partner_ref" position="after">
           <!-- <field name="higher_validation_id"/> -->
+          <field name="division_id"/>
           <field name="next_group"/>
         </field>
       </field>

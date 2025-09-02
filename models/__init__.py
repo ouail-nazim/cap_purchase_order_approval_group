@@ -2,3 +2,4 @@
 
 from . import purchase_order_approval_group
 from . import purchase_order
+from . import purchase_order_approvals

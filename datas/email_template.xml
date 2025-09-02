@@ -6,11 +6,6 @@
           <field name="email_from">{{(object.user_id.email_formatted or user.email_formatted)}}</field>
           <field name="email_to">{{object.must_send_mail(object.amount_total)}}</field>
           <field name="subject">#{{object.name or object.id}} approbation</field>
-          <!-- <field name="body_html"><![CDATA[
-            <p>Dear <t t-out="object.must_send_mail(object.amount_total).name"/></p>
-            <p>You 've been asked for your approbation for the #<t t-out="object.name"/> PO</p>
-          ]]>
-          </field> -->
           <field name="body_html"><![CDATA[
             <t t-set="recipients" t-value="object.must_send_mail(object.amount_total)"/>
             <p>Dear approvers,</p>
